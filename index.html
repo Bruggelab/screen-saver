@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Geometry Screensaver</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            width: 100vw;
+            height: 100vh;
+            cursor: none;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .shape {
+            position: absolute;
+            border-width: 2px;
+            border-style: solid;
+            background-color: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
+            animation-duration: var(--pulse-duration);
+            animation-iteration-count: infinite;
+            animation-direction: alternate;
+            animation-name: pulse;
+            animation-timing-function: ease-in-out;
+            transition: opacity 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .triangle {
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        .square {
+            border-radius: 0;
+        }
+
+        .circle {
+            border-radius: 50%;
+        }
+
+        .hexagon {
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+        }
+
+        .pentagon {
+            clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: var(--min-opacity);
+                box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+            }
+            100% {
+                opacity: var(--max-opacity);
+                box-shadow: 0 0 15px currentColor, 0 0 30px currentColor, 0 0 45px currentColor;
+            }
+        }
+
+        /* For fullscreen button */
+        #fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            padding: 10px 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border: 1px solid #fff;
+            cursor: pointer;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+            transition: opacity 0.5s ease;
+        }
+
+        #fullscreen-btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hide UI elements after 3 seconds of inactivity */
+        body.hide-ui #fullscreen-btn {
+            opacity: 0;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="container"></div>
+    <button id="fullscreen-btn">Go Fullscreen</button>
+
+    <script>
+        // Configuration
+        const config = {
+            shapeCount: 120,           // Adjust based on screen size/performance
+            shapeTypes: ['triangle', 'square', 'circle', 'hexagon', 'pentagon'],
+            colors: [
+                '#00FFFF',  // Electric blue
+                '#00FF00',  // Neon green
+                '#FF00FF',  // Hot pink
+                '#9900FF',  // Vibrant purple
+                '#FF3300',  // Neon orange
+                '#FFFF00'   // Neon yellow
+            ],
+            minSize: 30,
+            maxSize: 120,
+            minOpacity: 0.3,
+            maxOpacity: 0.9,
+            minPulseDuration: 3,       // in seconds
+            maxPulseDuration: 8,       // in seconds
+            clusterCount: 5,           // Number of animation timing clusters
+            refreshInterval: 10000     // Time to refresh some shapes (ms)
+        };
+
+        // DOM elements
+        const container = document.getElementById('container');
+        const fullscreenBtn = document.getElementById('fullscreen-btn');
+        
+        // State variables
+        let shapes = [];
+        let lastInteraction = Date.now();
+        let isUIHidden = false;
+        
+        // Track mouse movement to show/hide UI
+        document.addEventListener('mousemove', () => {
+            lastInteraction = Date.now();
+            document.body.classList.remove('hide-ui');
+            isUIHidden = false;
+        });
+
+        // Fullscreen handling
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        document.addEventListener('fullscreenchange', () => {
+            fullscreenBtn.textContent = document.fullscreenElement ? 'Exit Fullscreen' : 'Go Fullscreen';
+        });
+
+        // Create shape elements
+        function createShapes() {
+            const containerRect = container.getBoundingClientRect();
+            
+            for (let i = 0; i < config.shapeCount; i++) {
+                createShape(containerRect);
+            }
+        }
+
+        function createShape(containerRect) {
+            const shape = document.createElement('div');
+            const shapeType = config.shapeTypes[Math.floor(Math.random() * config.shapeTypes.length)];
+            const color = config.colors[Math.floor(Math.random() * config.colors.length)];
+            const size = Math.random() * (config.maxSize - config.minSize) + config.minSize;
+            const cluster = Math.floor(Math.random() * config.clusterCount);
+            const pulseDuration = config.minPulseDuration + (Math.random() * (config.maxPulseDuration - config.minPulseDuration));
+            
+            // Set the position (ensure shape is fully visible)
+            const left = Math.random() * (containerRect.width - size);
+            const top = Math.random() * (containerRect.height - size);
+            
+            // Apply values to the shape
+            shape.className = `shape ${shapeType}`;
+            shape.style.width = `${size}px`;
+            shape.style.height = `${size}px`;
+            shape.style.left = `${left}px`;
+            shape.style.top = `${top}px`;
+            shape.style.borderColor = color;
+            shape.style.color = color;
+            shape.style.setProperty('--pulse-duration', `${pulseDuration}s`);
+            shape.style.setProperty('--min-opacity', config.minOpacity.toString());
+            shape.style.setProperty('--max-opacity', config.maxOpacity.toString());
+            shape.dataset.cluster = cluster;
+
+            // Random animation delay for more organic feel
+            shape.style.animationDelay = `${Math.random() * pulseDuration}s`;
+            
+            // Store in our array and append to DOM
+            shapes.push(shape);
+            container.appendChild(shape);
+            
+            return shape;
+        }
+
+        // Periodically modify some shapes for variation
+        function refreshShapes() {
+            // Select ~10% of shapes to refresh
+            const refreshCount = Math.floor(shapes.length * 0.1);
+            const indicesToRefresh = [];
+            
+            while (indicesToRefresh.length < refreshCount) {
+                const randomIndex = Math.floor(Math.random() * shapes.length);
+                if (!indicesToRefresh.includes(randomIndex)) {
+                    indicesToRefresh.push(randomIndex);
+                }
+            }
+            
+            indicesToRefresh.forEach(index => {
+                const shape = shapes[index];
+                const newColor = config.colors[Math.floor(Math.random() * config.colors.length)];
+                const newPulseDuration = config.minPulseDuration + (Math.random() * (config.maxPulseDuration - config.minPulseDuration));
+                
+                // Apply new values with animation
+                shape.style.transition = 'color 1.5s ease, border-color 1.5s ease';
+                shape.style.color = newColor;
+                shape.style.borderColor = newColor;
+                shape.style.setProperty('--pulse-duration', `${newPulseDuration}s`);
+                
+                // Randomly brighten some shapes for a "surge" effect
+                if (Math.random() < 0.3) {
+                    const originalBoxShadow = shape.style.boxShadow;
+                    shape.style.boxShadow = `0 0 30px ${newColor}, 0 0 50px ${newColor}, 0 0 70px ${newColor}`;
+                    
+                    setTimeout(() => {
+                        shape.style.boxShadow = originalBoxShadow;
+                    }, 1000);
+                }
+            });
+        }
+
+        // Handle window resize
+        function handleResize() {
+            // Clear existing shapes
+            shapes.forEach(shape => container.removeChild(shape));
+            shapes = [];
+            
+            // Create new shapes for the new container size
+            createShapes();
+        }
+
+        // Check if UI should be hidden
+        function checkUIVisibility() {
+            if (Date.now() - lastInteraction > 3000 && !isUIHidden) {
+                document.body.classList.add('hide-ui');
+                isUIHidden = true;
+            }
+            requestAnimationFrame(checkUIVisibility);
+        }
+
+        // Initialize the screensaver
+        function init() {
+            createShapes();
+            
+            // Set up periodic refreshing of shapes
+            setInterval(refreshShapes, config.refreshInterval);
+            
+            // Handle window resize
+            window.addEventListener('resize', handleResize);
+            
+            // Start UI visibility check
+            checkUIVisibility();
+        }
+
+        // Start when page is loaded
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
