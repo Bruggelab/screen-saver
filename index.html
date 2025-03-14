@@ -3,269 +3,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Neon Geometry Screensaver</title>
+    <title>Neon Geometry Screensaver (CSS-Only)</title>
     <style>
-        body {
+        /* Base Styles */
+        * {
             margin: 0;
             padding: 0;
-            overflow: hidden;
+            box-sizing: border-box;
+        }
+        
+        body {
             background-color: #000;
+            overflow: hidden;
             width: 100vw;
             height: 100vh;
-            cursor: none;
         }
-
-        .container {
+        
+        /* Container for all shapes */
+        .shapes-container {
             position: relative;
             width: 100%;
             height: 100%;
         }
-
+        
+        /* Base Shape Styles */
         .shape {
             position: absolute;
-            border-width: 2px;
             border-style: solid;
+            border-width: 2px;
             background-color: rgba(0, 0, 0, 0.3);
             box-shadow: 0 0 10px currentColor, 0 0 20px currentColor;
-            animation-duration: var(--pulse-duration);
+            animation-duration: var(--pulse-duration, 5s);
             animation-iteration-count: infinite;
             animation-direction: alternate;
             animation-name: pulse;
             animation-timing-function: ease-in-out;
-            transition: opacity 0.5s ease, box-shadow 0.5s ease;
         }
-
-        .triangle {
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-
-        .square {
-            border-radius: 0;
-        }
-
+        
+        /* Shape Types */
         .circle {
             border-radius: 50%;
         }
-
+        
+        .square {
+            border-radius: 0;
+        }
+        
+        .triangle {
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+        
         .hexagon {
             clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
         }
-
+        
         .pentagon {
             clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
         }
+        
+        /* Color Classes */
+        .blue { 
+            color: #00FFFF; 
+            border-color: #00FFFF;
+        }
+        
+        .green { 
+            color: #00FF00; 
+            border-color: #00FF00;
+        }
+        
+        .pink { 
+            color: #FF00FF; 
+            border-color: #FF00FF;
+        }
+        
+        .purple { 
+            color: #9900FF; 
+            border-color: #9900FF;
+        }
+        
+        .orange { 
+            color: #FF3300; 
+            border-color: #FF3300;
+        }
+        
+        .yellow { 
+            color: #FFFF00; 
+            border-color: #FFFF00;
+        }
 
+        /* Animation Keyframes */
         @keyframes pulse {
             0% {
-                opacity: var(--min-opacity);
+                opacity: 0.3;
                 box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
             }
             100% {
-                opacity: var(--max-opacity);
+                opacity: 0.9;
                 box-shadow: 0 0 15px currentColor, 0 0 30px currentColor, 0 0 45px currentColor;
             }
         }
-
-        /* For fullscreen button */
-        #fullscreen-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 100;
-            padding: 10px 20px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-            border: 1px solid #fff;
-            cursor: pointer;
-            border-radius: 5px;
-            font-family: Arial, sans-serif;
-            transition: opacity 0.5s ease;
+        
+        @keyframes color-shift {
+            0% { filter: hue-rotate(0deg); }
+            33% { filter: hue-rotate(60deg); }
+            66% { filter: hue-rotate(180deg); }
+            100% { filter: hue-rotate(0deg); }
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: var(--min-opacity, 0.3); }
+            50% { opacity: var(--max-opacity, 0.9); }
         }
 
-        #fullscreen-btn:hover {
-            background-color: rgba(255, 255, 255, 0.2);
+        /* Individual Shape Positioning and Animations */
+        /* Large shapes - Row 1 */
+        .shape:nth-child(1) {
+            width: 100px; height: 100px;
+            top: 5%; left: 5%;
+            --pulse-duration: 7s;
+            animation-delay: 0.5s;
+        }
+        
+        .shape:nth-child(2) {
+            width: 90px; height: 90px;
+            top: 8%; left: 25%;
+            --pulse-duration: 6s;
+            animation-delay: 1.5s;
+        }
+        
+        .shape:nth-child(3) {
+            width: 110px; height: 110px;
+            top: 3%; left: 45%;
+            --pulse-duration: 8s;
+            animation-delay: 0.2s;
+        }
+        
+        .shape:nth-child(4) {
+            width: 80px; height: 80px;
+            top: 10%; left: 65%;
+            --pulse-duration: 5.5s;
+            animation-delay: 3s;
+        }
+        
+        .shape:nth-child(5) {
+            width: 95px; height: 95px;
+            top: 7%; left: 85%;
+            --pulse-duration: 6.5s;
+            animation-delay: 1.1s;
+        }
+        
+        /* Medium shapes - Row 2 */
+        .shape:nth-child(6) {
+            width: 75px; height: 75px;
+            top: 25%; left: 10%;
+            --pulse-duration: 5.8s;
+            animation-delay: 0.9s;
+        }
+        
+        .shape:nth-child(7) {
+            width: 80px; height: 80px;
+            top: 20%; left: 30%;
+            --pulse-duration: 6.2s;
+            animation-delay: 2.2s;
+        }
+        
+        .shape:nth-child(8) {
+            width: 85px; height: 85px;
+            top: 22%; left: 50%;
+            --pulse-duration: 7.1s;
+            animation-delay: 0.6s;
+        }
+        
+        .shape:nth-child(9) {
+            width: 70px; height: 70px;
+            top: 18%; left: 70%;
+            --pulse-duration: 5.3s;
+            animation-delay: 2.8s;
+        }
+        
+        .shape:nth-child(10) {
+            width: 90px; height: 90px;
+            top: 24%; left: 90%;
+            --pulse-duration: 6.9s;
+            animation-delay: 1.7s;
+        }
+        
+        /* Row 3 */
+        .shape:nth-child(11) {
+            width: 65px; height: 65px;
+            top: 40%; left: 5%;
+            --pulse-duration: 5.1s;
+            animation-delay: 1.2s;
+        }
+        
+        .shape:nth-child(12) {
+            width: 70px; height: 70px;
+            top: 38%; left: 20%;
+            --pulse-duration: 5.9s;
+            animation-delay: 2.9s;
+        }
+        
+        .shape:nth-child(13) {
+            width: 75px; height: 75px;
+            top: 42%; left: 35%;
+            --pulse-duration: 6.4s;
+            animation-delay: 0.3s;
+        }
+        
+        .shape:nth-child(14) {
+            width: 80px; height: 80px;
+            top: 39%; left: 55%;
+            --pulse-duration: 7.2s;
+            animation-delay: 3.1s;
+        }
+        
+        .shape:nth-child(15) {
+            width: 85px; height: 85px;
+            top: 41%; left: 75%;
+            --pulse-duration: 6.7s;
+            animation-delay: 0.8s;
+        }
+        
+        /* Row 4 */
+        .shape:nth-child(16) {
+            width: 60px; height: 60px;
+            top: 60%; left: 8%;
+            --pulse-duration: 4.8s;
+            animation-delay: 2.3s;
+        }
+        
+        .shape:nth-child(17) {
+            width: 65px; height: 65px;
+            top: 58%; left: 25%;
+            --pulse-duration: 5.5s;
+            animation-delay: 0.7s;
+        }
+        
+        .shape:nth-child(18) {
+            width: 70px; height: 70px;
+            top: 62%; left: 42%;
+            --pulse-duration: 6.1s;
+            animation-delay: 2.5s;
+        }
+        
+        .shape:nth-child(19) {
+            width: 75px; height: 75px;
+            top: 59%; left: 60%;
+            --pulse-duration: 5.7s;
+            animation-delay: 1.2s;
+        }
+        
+        .shape:nth-child(20) {
+            width: 70px; height: 70px;
+            top: 61%; left: 80%;
+            --pulse-duration: 6.3s;
+            animation-delay: 3.4s;
+        }
+        
+        /* Row 5 */
+        .shape:nth-child(21) {
+            width: 55px; height: 55px;
+            top: 78%; left: 12%;
+            --pulse-duration: 4.5s;
+            animation-delay: 1.9s;
+        }
+        
+        .shape:nth-child(22) {
+            width: 60px; height: 60px;
+            top: 80%; left: 30%;
+            --pulse-duration: 5.2s;
+            animation-delay: 0.4s;
+        }
+        
+        .shape:nth-child(23) {
+            width: 65px; height: 65px;
+            top: 76%; left: 50%;
+            --pulse-duration: 5.8s;
+            animation-delay: 2.1s;
+        }
+        
+        .shape:nth-child(24) {
+            width: 70px; height: 70px;
+            top: 82%; left: 68%;
+            --pulse-duration: 6.5s;
+            animation-delay: 0.6s;
+        }
+        
+        .shape:nth-child(25) {
+            width: 65px; height: 65px;
+            top: 79%; left: 88%;
+            --pulse-duration: 5.4s;
+            animation-delay: 3.3s;
         }
 
-        /* Hide UI elements after 3 seconds of inactivity */
-        body.hide-ui #fullscreen-btn {
-            opacity: 0;
-            pointer-events: none;
+        /* Additional smaller shapes */
+        .shape:nth-child(26) { 
+            width: 45px; height: 45px; 
+            top: 15%; left: 15%; 
+            --pulse-duration: 4.2s;
+            animation-delay: 1.4s;
+        }
+        
+        .shape:nth-child(27) { 
+            width: 50px; height: 50px; 
+            top: 32%; left: 43%; 
+            --pulse-duration: 4.8s;
+            animation-delay: 2.6s;
+        }
+        
+        .shape:nth-child(28) { 
+            width: 40px; height: 40px; 
+            top: 27%; left: 78%; 
+            --pulse-duration: 3.9s;
+            animation-delay: 0.7s;
+        }
+        
+        .shape:nth-child(29) { 
+            width: 55px; height: 55px; 
+            top: 48%; left: 22%; 
+            --pulse-duration: 5.1s;
+            animation-delay: 1.8s;
+        }
+        
+        .shape:nth-child(30) { 
+            width: 45px; height: 45px; 
+            top: 53%; left: 73%; 
+            --pulse-duration: 4.5s;
+            animation-delay: 3.2s;
+        }
+        
+        /* Add color change animation to some shapes */
+        .shape:nth-child(3n+1) {
+            animation: pulse var(--pulse-duration, 5s) infinite alternate, 
+                      color-shift 15s infinite linear;
+        }
+        
+        /* Add blinking to some shapes */
+        .shape:nth-child(5n+2) {
+            animation: pulse var(--pulse-duration, 5s) infinite alternate,
+                      blink 8s infinite;
+        }
+        
+        /* Add more intense glow to some shapes */
+        .shape:nth-child(7n+4) {
+            box-shadow: 0 0 15px currentColor, 0 0 30px currentColor, 0 0 50px currentColor;
+        }
+
+        /* Secondary shape layer for higher density */
+        .shape:nth-child(n+31) { 
+            width: 35px; height: 35px; 
+            opacity: 0.7;
+        }
+        
+        .shape:nth-child(31) { top: 12%; left: 38%; --pulse-duration: 3.8s; animation-delay: 1.2s; }
+        .shape:nth-child(32) { top: 23%; left: 62%; --pulse-duration: 4.3s; animation-delay: 2.7s; }
+        .shape:nth-child(33) { top: 36%; left: 12%; --pulse-duration: 3.5s; animation-delay: 0.9s; }
+        .shape:nth-child(34) { top: 44%; left: 88%; --pulse-duration: 4.1s; animation-delay: 3.4s; }
+        .shape:nth-child(35) { top: 57%; left: 36%; --pulse-duration: 3.9s; animation-delay: 1.5s; }
+        .shape:nth-child(36) { top: 68%; left: 53%; --pulse-duration: 4.6s; animation-delay: 2.8s; }
+        .shape:nth-child(37) { top: 72%; left: 22%; --pulse-duration: 3.7s; animation-delay: 0.5s; }
+        .shape:nth-child(38) { top: 85%; left: 44%; --pulse-duration: 4.2s; animation-delay: 2.3s; }
+        .shape:nth-child(39) { top: 34%; left: 67%; --pulse-duration: 3.6s; animation-delay: 1.1s; }
+        .shape:nth-child(40) { top: 51%; left: 15%; --pulse-duration: 4.4s; animation-delay: 3.0s; }
+        
+        /* Third layer of smaller shapes */
+        .shape:nth-child(n+41) { 
+            width: 25px; height: 25px; 
+            opacity: 0.6;
+        }
+        
+        .shape:nth-child(41) { top: 9%; left: 52%; --pulse-duration: 3.3s; animation-delay: 0.8s; }
+        .shape:nth-child(42) { top: 18%; left: 83%; --pulse-duration: 3.8s; animation-delay: 2.1s; }
+        .shape:nth-child(43) { top: 33%; left: 27%; --pulse-duration: 3.1s; animation-delay: 1.4s; }
+        .shape:nth-child(44) { top: 47%; left: 64%; --pulse-duration: 3.6s; animation-delay: 2.9s; }
+        .shape:nth-child(45) { top: 52%; left: 31%; --pulse-duration: 3.4s; animation-delay: 0.3s; }
+        .shape:nth-child(46) { top: 63%; left: 71%; --pulse-duration: 3.9s; animation-delay: 1.7s; }
+        .shape:nth-child(47) { top: 77%; left: 59%; --pulse-duration: 3.2s; animation-delay: 2.4s; }
+        .shape:nth-child(48) { top: 89%; left: 34%; --pulse-duration: 3.7s; animation-delay: 0.7s; }
+        .shape:nth-child(49) { top: 29%; left: 91%; --pulse-duration: 3.3s; animation-delay: 1.9s; }
+        .shape:nth-child(50) { top: 65%; left: 8%; --pulse-duration: 3.5s; animation-delay: 2.5s; }
+        
+        /* Background animation for added effect */
+        @keyframes bg-pulse {
+            0%, 100% { background-color: #000000; }
+            50% { background-color: #0a0a0a; }
+        }
+        
+        body {
+            animation: bg-pulse 20s infinite;
         }
     </style>
 </head>
 <body>
-    <div class="container" id="container"></div>
-    <button id="fullscreen-btn">Go Fullscreen</button>
-
-    <script>
-        // Configuration
-        const config = {
-            shapeCount: 120,           // Adjust based on screen size/performance
-            shapeTypes: ['triangle', 'square', 'circle', 'hexagon', 'pentagon'],
-            colors: [
-                '#00FFFF',  // Electric blue
-                '#00FF00',  // Neon green
-                '#FF00FF',  // Hot pink
-                '#9900FF',  // Vibrant purple
-                '#FF3300',  // Neon orange
-                '#FFFF00'   // Neon yellow
-            ],
-            minSize: 30,
-            maxSize: 120,
-            minOpacity: 0.3,
-            maxOpacity: 0.9,
-            minPulseDuration: 3,       // in seconds
-            maxPulseDuration: 8,       // in seconds
-            clusterCount: 5,           // Number of animation timing clusters
-            refreshInterval: 10000     // Time to refresh some shapes (ms)
-        };
-
-        // DOM elements
-        const container = document.getElementById('container');
-        const fullscreenBtn = document.getElementById('fullscreen-btn');
+    <div class="shapes-container">
+        <!-- Row 1 - Large shapes -->
+        <div class="shape circle blue"></div>
+        <div class="shape square green"></div>
+        <div class="shape hexagon pink"></div>
+        <div class="shape triangle purple"></div>
+        <div class="shape pentagon orange"></div>
         
-        // State variables
-        let shapes = [];
-        let lastInteraction = Date.now();
-        let isUIHidden = false;
+        <!-- Row 2 - Medium shapes -->
+        <div class="shape triangle yellow"></div>
+        <div class="shape circle blue"></div>
+        <div class="shape pentagon green"></div>
+        <div class="shape square pink"></div>
+        <div class="shape hexagon purple"></div>
         
-        // Track mouse movement to show/hide UI
-        document.addEventListener('mousemove', () => {
-            lastInteraction = Date.now();
-            document.body.classList.remove('hide-ui');
-            isUIHidden = false;
-        });
-
-        // Fullscreen handling
-        fullscreenBtn.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        });
-
-        document.addEventListener('fullscreenchange', () => {
-            fullscreenBtn.textContent = document.fullscreenElement ? 'Exit Fullscreen' : 'Go Fullscreen';
-        });
-
-        // Create shape elements
-        function createShapes() {
-            const containerRect = container.getBoundingClientRect();
-            
-            for (let i = 0; i < config.shapeCount; i++) {
-                createShape(containerRect);
-            }
-        }
-
-        function createShape(containerRect) {
-            const shape = document.createElement('div');
-            const shapeType = config.shapeTypes[Math.floor(Math.random() * config.shapeTypes.length)];
-            const color = config.colors[Math.floor(Math.random() * config.colors.length)];
-            const size = Math.random() * (config.maxSize - config.minSize) + config.minSize;
-            const cluster = Math.floor(Math.random() * config.clusterCount);
-            const pulseDuration = config.minPulseDuration + (Math.random() * (config.maxPulseDuration - config.minPulseDuration));
-            
-            // Set the position (ensure shape is fully visible)
-            const left = Math.random() * (containerRect.width - size);
-            const top = Math.random() * (containerRect.height - size);
-            
-            // Apply values to the shape
-            shape.className = `shape ${shapeType}`;
-            shape.style.width = `${size}px`;
-            shape.style.height = `${size}px`;
-            shape.style.left = `${left}px`;
-            shape.style.top = `${top}px`;
-            shape.style.borderColor = color;
-            shape.style.color = color;
-            shape.style.setProperty('--pulse-duration', `${pulseDuration}s`);
-            shape.style.setProperty('--min-opacity', config.minOpacity.toString());
-            shape.style.setProperty('--max-opacity', config.maxOpacity.toString());
-            shape.dataset.cluster = cluster;
-
-            // Random animation delay for more organic feel
-            shape.style.animationDelay = `${Math.random() * pulseDuration}s`;
-            
-            // Store in our array and append to DOM
-            shapes.push(shape);
-            container.appendChild(shape);
-            
-            return shape;
-        }
-
-        // Periodically modify some shapes for variation
-        function refreshShapes() {
-            // Select ~10% of shapes to refresh
-            const refreshCount = Math.floor(shapes.length * 0.1);
-            const indicesToRefresh = [];
-            
-            while (indicesToRefresh.length < refreshCount) {
-                const randomIndex = Math.floor(Math.random() * shapes.length);
-                if (!indicesToRefresh.includes(randomIndex)) {
-                    indicesToRefresh.push(randomIndex);
-                }
-            }
-            
-            indicesToRefresh.forEach(index => {
-                const shape = shapes[index];
-                const newColor = config.colors[Math.floor(Math.random() * config.colors.length)];
-                const newPulseDuration = config.minPulseDuration + (Math.random() * (config.maxPulseDuration - config.minPulseDuration));
-                
-                // Apply new values with animation
-                shape.style.transition = 'color 1.5s ease, border-color 1.5s ease';
-                shape.style.color = newColor;
-                shape.style.borderColor = newColor;
-                shape.style.setProperty('--pulse-duration', `${newPulseDuration}s`);
-                
-                // Randomly brighten some shapes for a "surge" effect
-                if (Math.random() < 0.3) {
-                    const originalBoxShadow = shape.style.boxShadow;
-                    shape.style.boxShadow = `0 0 30px ${newColor}, 0 0 50px ${newColor}, 0 0 70px ${newColor}`;
-                    
-                    setTimeout(() => {
-                        shape.style.boxShadow = originalBoxShadow;
-                    }, 1000);
-                }
-            });
-        }
-
-        // Handle window resize
-        function handleResize() {
-            // Clear existing shapes
-            shapes.forEach(shape => container.removeChild(shape));
-            shapes = [];
-            
-            // Create new shapes for the new container size
-            createShapes();
-        }
-
-        // Check if UI should be hidden
-        function checkUIVisibility() {
-            if (Date.now() - lastInteraction > 3000 && !isUIHidden) {
-                document.body.classList.add('hide-ui');
-                isUIHidden = true;
-            }
-            requestAnimationFrame(checkUIVisibility);
-        }
-
-        // Initialize the screensaver
-        function init() {
-            createShapes();
-            
-            // Set up periodic refreshing of shapes
-            setInterval(refreshShapes, config.refreshInterval);
-            
-            // Handle window resize
-            window.addEventListener('resize', handleResize);
-            
-            // Start UI visibility check
-            checkUIVisibility();
-        }
-
-        // Start when page is loaded
-        window.addEventListener('load', init);
-    </script>
+        <!-- Row 3 -->
+        <div class="shape pentagon orange"></div>
+        <div class="shape triangle yellow"></div>
+        <div class="shape circle blue"></div>
+        <div class="shape square green"></div>
+        <div class="shape hexagon pink"></div>
+        
+        <!-- Row 4 -->
+        <div class="shape hexagon purple"></div>
+        <div class="shape pentagon orange"></div>
+        <div class="shape triangle yellow"></div>
+        <div class="shape circle blue"></div>
+        <div class="shape square green"></div>
+        
+        <!-- Row 5 -->
+        <div class="shape square pink"></div>
+        <div class="shape hexagon purple"></div>
+        <div class="shape pentagon orange"></div>
+        <div class="shape triangle yellow"></div>
+        <div class="shape circle blue"></div>
+        
+        <!-- Additional smaller shapes -->
+        <div class="shape square green"></div>
+        <div class="shape pentagon pink"></div>
+        <div class="shape triangle purple"></div>
+        <div class="shape hexagon orange"></div>
+        <div class="shape circle yellow"></div>
+        
+        <!-- Secondary shape layer -->
+        <div class="shape circle blue"></div>
+        <div class="shape square green"></div>
+        <div class="shape triangle pink"></div>
+        <div class="shape pentagon purple"></div>
+        <div class="shape hexagon orange"></div>
+        <div class="shape circle yellow"></div>
+        <div class="shape square blue"></div>
+        <div class="shape triangle green"></div>
+        <div class="shape pentagon pink"></div>
+        <div class="shape hexagon purple"></div>
+        
+        <!-- Tertiary shape layer -->
+        <div class="shape circle orange"></div>
+        <div class="shape square yellow"></div>
+        <div class="shape triangle blue"></div>
+        <div class="shape pentagon green"></div>
+        <div class="shape hexagon pink"></div>
+        <div class="shape circle purple"></div>
+        <div class="shape square orange"></div>
+        <div class="shape triangle yellow"></div>
+        <div class="shape pentagon blue"></div>
+        <div class="shape hexagon green"></div>
+    </div>
 </body>
 </html>
